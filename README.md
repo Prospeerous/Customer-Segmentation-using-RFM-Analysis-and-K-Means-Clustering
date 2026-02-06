@@ -32,6 +32,8 @@ This project analyses transactional data from the [Online Retail II](https://arc
 | **New / Potential** | Recent first-time buyers — nurture with onboarding campaigns |
 | **At Risk / Hibernating** | Lapsed customers — re-engage with win-back offers |
 
+![Customer Segment Distribution](Images/Customer%20Segments%20Distributions.png)
+
 ## Tech Stack
 
 - **Python** — pandas, NumPy, scikit-learn, matplotlib, seaborn
@@ -48,6 +50,8 @@ This project analyses transactional data from the [Online Retail II](https://arc
 ├── scaler.pkl                              # Fitted StandardScaler
 ├── templates/
 │   └── index.html                          # Web UI template
+├── Images/
+│   └── Customer Segments Distributions.png # Segment distribution chart
 ├── requirements.txt                        # Python dependencies
 └── README.md
 ```
