@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Segmentation App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #e8edf5 0%, #d5dce8 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .header h1 {
+            font-size: 28px;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+        .header p {
+            color: #666;
+            font-size: 15px;
+        }
+
+        /* Form Card */
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            padding: 32px;
+            margin-bottom: 28px;
+        }
+        .card h2 {
+            font-size: 18px;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 15px;
+            border: 2px solid #e0e4eb;
+            border-radius: 8px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        .form-group input:focus {
+            border-color: #0d6efd;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(13, 110, 253, 0.35);
+        }
+
+        /* Result Section */
+        .result-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+
+        .result-header {
+            padding: 28px 32px;
+            color: #fff;
+            text-align: center;
+        }
+        .result-header i {
+            font-size: 36px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .result-header h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .result-header p {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        /* RFM Summary Bar */
+        .rfm-summary {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        .rfm-item {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            border-right: 1px solid #eee;
+        }
+        .rfm-item:last-child { border-right: none; }
+        .rfm-item .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        .rfm-item .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        /* Insights & Recommendations */
+        .section {
+            padding: 24px 32px;
+            border-bottom: 1px solid #eee;
+        }
+        .section:last-child { border-bottom: none; }
+        .section h3 {
+            font-size: 16px;
+            color: #1a1a2e;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section h3 i {
+            font-size: 14px;
+            color: #0d6efd;
+        }
+        .section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .section ul li {
+            padding: 8px 0 8px 24px;
+            position: relative;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #444;
+        }
+        .section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .insights-list li::before {
+            background: #0d6efd;
+        }
+        .recommendations-list li::before {
+            background: #0d6efd;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-chart-pie" style="color: #0d6efd;"></i> RFM Customer Segmentation</h1>
+        <p>Enter customer RFM values to predict their segment and get actionable insights</p>
+    </div>
+
+    <div class="card">
+        <h2><i class="fas fa-sliders-h" style="color: #0d6efd;"></i> Enter RFM Values</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Recency (days since last purchase)</label>
+                <input type="number" step="any" name="recency" placeholder="e.g. 30"
+                       value="{{ result.recency if result else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Frequency (number of purchases)</label>
+                <input type="number" step="any" name="frequency" placeholder="e.g. 12"
+                       value="{{ result.frequency if result else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Monetary (total spend in KES)</label>
+                <input type="number" step="any" name="monetary" placeholder="e.g. 45000"
+                       value="{{ result.monetary if result else '' }}" required>
+            </div>
+            <button type="submit" class="btn">
+                <i class="fas fa-search"></i> Predict Segment
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="result-card">
+        <div class="result-header" style="background: {{ result.color }};">
+            <i class="fas fa-{{ result.icon }}"></i>
+            <h2>{{ result.name }}</h2>
+            <p>{{ result.description }}</p>
+        </div>
+
+        <div class="rfm-summary">
+            <div class="rfm-item">
+                <div class="label">Recency</div>
+                <div class="value">{{ result.recency | int }} days</div>
+            </div>
+            <div class="rfm-item">
+                <div class="label">Frequency</div>
+                <div class="value">{{ result.frequency | int }}</div>
+            </div>
+            <div class="rfm-item">
+                <div class="label">Monetary</div>
+                <div class="value">KES {{ "{:,.0f}".format(result.monetary) }}</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3><i class="fas fa-lightbulb"></i> Business Insights</h3>
+            <ul class="insights-list">
+                {% for insight in result.insights %}
+                <li>{{ insight }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3><i class="fas fa-clipboard-check"></i> Recommendations</h3>
+            <ul class="recommendations-list">
+                {% for rec in result.recommendations %}
+                <li>{{ rec }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        RFM Customer Segmentation &mdash; Powered by K-Means Clustering
+    </div>
+</div>
+
+</body>
+</html>
